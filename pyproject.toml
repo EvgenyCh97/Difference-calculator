@@ -9,6 +9,9 @@ packages = [{include = "gendiff"}]
 [tool.poetry.dependencies]
 python = "^3.8"
 
+[tool.poetry.scripts]
+gendiff = "gendiff.scripts.gendiff:main"
+
 
 [build-system]
 requires = ["poetry-core"]
