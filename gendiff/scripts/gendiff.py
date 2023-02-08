@@ -1,10 +1,10 @@
 #!/usr/bin/env pethon3
 
-from gendiff import gendiff_prog
+from gendiff.gendiff import generate_diff
 
 
 def main():
-    gendiff_prog
+    print(generate_diff())
 
 
 if __name__ == '__main__':
