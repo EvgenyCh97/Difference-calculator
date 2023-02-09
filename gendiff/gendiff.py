@@ -1,13 +1,4 @@
-import argparse
 import json
-
-parser = argparse.ArgumentParser(
-    description='Compares two configuration files and shows a difference.'
-)
-parser.add_argument('first_file', type=str)
-parser.add_argument('second_file', type=str)
-parser.add_argument('-f', '--format', help='set format of output')
-arguments = parser.parse_args()
 
 
 def get_dicts_from_(file_path1, file_path2):
@@ -83,11 +74,12 @@ def get_result_list(file_path1, file_path2, *args):
     return result
 
 
-def generate_diff():
-    return encode_(sort_(get_result_list(
-        arguments.first_file,
-        arguments.second_file,
-        get_matches,
-        get_new_lines,
-        get_old_lines,
-        get_updated_lines))).replace('"', '').replace(',', '')
+def generate_diff(file_path1, file_path2):
+    return encode_(sort_(get_result_list(file_path1, file_path2,
+                                         get_matches,
+                                         get_new_lines,
+                                         get_old_lines,
+                                         get_updated_lines
+                                         )
+                         )
+                   ).replace('"', '').replace(',', '')
