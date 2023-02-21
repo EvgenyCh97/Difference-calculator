@@ -1,4 +1,4 @@
-#!/usr/bin/env pethon3
+#!/usr/bin/env python3
 
 from gendiff.parser import ARGS
 from gendiff.gendiff import generate_diff
