@@ -64,13 +64,11 @@ def get_updated_lines(file_path1, file_path2):
 def get_result_list(file_path1, file_path2, *args):
     result = list()
     for element in [func(file_path1, file_path2) for func in args]:
-        if type(element[0]) == tuple:
-            for items_tuple in element:
-                result.append(items_tuple)
-        if type(element[0]) == list:
-            for items_list in element:
-                for item in items_list:
-                    result.append(item)
+        [result.append(items_tuple)
+         for items_tuple in element if type(element[0]) == tuple]
+        [[result.append(item)
+          for item in items_list]
+         for items_list in element if type(element[0]) == list]
     return result
 
 
