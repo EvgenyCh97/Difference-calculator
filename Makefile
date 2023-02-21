@@ -12,4 +12,7 @@ reinstall: build package-install
 
 full-reinstall: build package-install reinstall
 
+lint:
+	poetry run flake8 gendiff
+
 .PHONY: install build reinstall
