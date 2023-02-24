@@ -15,4 +15,7 @@ full-reinstall: build package-install reinstall
 lint:
 	poetry run flake8 gendiff
 
+test:
+	poetry run pytest
+
 .PHONY: install build reinstall
