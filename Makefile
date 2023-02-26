@@ -24,6 +24,6 @@ reinstall: build package-install
 full-reinstall: build package-install reinstall
 
 test-coverage:
-	poetry run pytest --cov=gendiff tests/ --cov-report xml
+	poetry run pytest --cov=gendiff tests/ --cov-report xml tests/
 
 .PHONY: install test lint selfcheck check build
