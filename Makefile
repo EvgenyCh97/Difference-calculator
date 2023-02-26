@@ -1,9 +1,6 @@
 install:
 	poetry install
 
-build:
-	poetry build
-
 package-install:
 	python3 -m pip install --user dist/*.whl
 
@@ -17,5 +14,13 @@ lint:
 
 test:
 	poetry run pytest
+
+selfcheck:
+	poetry check
+
+check: selfcheck test lint
+
+build: check
+	poetry build
 
 .PHONY: install build reinstall
