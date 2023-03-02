@@ -1,8 +1,14 @@
 import json
+import yaml
+from yaml import CLoader as Loader
 
 
 def get_dicts_from_(file_path1, file_path2):
-    return json.load(open(file_path1)), json.load(open(file_path2))
+    if file_path1.endswith('.yml') or file_path1.endswith('.yaml'):
+        return (yaml.load(open(file_path1), Loader=Loader),
+                yaml.load(open(file_path2), Loader=Loader))
+    if file_path1.endswith('.json'):
+        return json.load(open(file_path1)), json.load(open(file_path2))
 
 
 def get_items_list(dictionary):
