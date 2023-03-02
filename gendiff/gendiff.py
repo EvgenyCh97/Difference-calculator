@@ -15,7 +15,7 @@ def get_keys_set_from_(dict1, dict2):
 
 
 def encode_(encoded_list):
-    return json.dumps(dict(encoded_list), sort_keys=False, indent=2)
+    return json.dumps(dict(encoded_list), indent=2)
 
 
 def sort_(sortable_list):
