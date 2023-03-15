@@ -1,4 +1,4 @@
-a: 1
-b:
-c: 3
-d: 4
+host: "hexlet.io"
+timeout: 50
+proxy: "123.234.53.22"
+follow: false
