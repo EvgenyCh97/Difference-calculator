@@ -49,6 +49,18 @@ def test_sort_():
     assert result == [('  a', 'first'), ('  b', 'second')]
 
 
+def test_get_result_list():
+    result = gendiff.get_result_list(JSON1, JSON2)
+    assert result == [('  host', 'hexlet.io'), ('- timeout', 50),
+                      ('+ timeout', 20), ('- proxy', '123.234.53.22'),
+                      ('- follow', False), ('+ verbose', True)]
+
+    result = gendiff.get_result_list(YAML1, YAML2)
+    assert result == [('  host', 'hexlet.io'), ('- timeout', 50),
+                      ('+ timeout', 20), ('- proxy', '123.234.53.22'),
+                      ('- follow', False), ('+ verbose', True)]
+
+
 def test_generate_diff():
     result = gendiff.generate_diff(JSON1, JSON2)
     with open('tests/fixtures/diff', 'r') as diff:

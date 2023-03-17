@@ -18,7 +18,7 @@ def sort_(sortable_list):
     return sorted(sortable_list, key=lambda items: items[0][2])
 
 
-def get_diff(file_path1, file_path2):
+def get_result_list(file_path1, file_path2):
     dict1 = get_dict_from_(file_path1)
     dict2 = get_dict_from_(file_path2)
     result = []
@@ -38,5 +38,5 @@ def get_diff(file_path1, file_path2):
 
 
 def generate_diff(file_path1, file_path2):
-    return encode_(sort_(get_diff(
+    return encode_(sort_(get_result_list(
         file_path1, file_path2))).replace('"', '').replace(',', '')
