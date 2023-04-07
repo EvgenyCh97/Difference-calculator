@@ -45,20 +45,24 @@ def test_encode_(json_dict1, json_dict2):
 
 
 def test_sort_():
-    result = gendiff.sort_([('  b', 'second'), ('  a', 'first')])
-    assert result == [('  a', 'first'), ('  b', 'second')]
+    result = gendiff.sort_({'  host': 'hexlet.io', '- timeout': 50,
+                            '+ timeout': 20, '- proxy': '123.234.53.22',
+                            '- follow': False, '+ verbose': True})
+    assert result == [('- follow', False), ('  host', 'hexlet.io'),
+                      ('- proxy', '123.234.53.22'), ('- timeout', 50),
+                      ('+ timeout', 20), ('+ verbose', True)]
 
 
 def test_get_result_list():
     result = gendiff.get_result_list(JSON1, JSON2)
-    assert result == [('  host', 'hexlet.io'), ('- timeout', 50),
-                      ('+ timeout', 20), ('- proxy', '123.234.53.22'),
-                      ('- follow', False), ('+ verbose', True)]
+    assert result == {'  host': 'hexlet.io', '- timeout': 50, '+ timeout': 20,
+                      '- proxy': '123.234.53.22', '- follow': False,
+                      '+ verbose': True}
 
     result = gendiff.get_result_list(YAML1, YAML2)
-    assert result == [('  host', 'hexlet.io'), ('- timeout', 50),
-                      ('+ timeout', 20), ('- proxy', '123.234.53.22'),
-                      ('- follow', False), ('+ verbose', True)]
+    assert result == {'  host': 'hexlet.io', '- timeout': 50, '+ timeout': 20,
+                      '- proxy': '123.234.53.22', '- follow': False,
+                      '+ verbose': True}
 
 
 def test_generate_diff():

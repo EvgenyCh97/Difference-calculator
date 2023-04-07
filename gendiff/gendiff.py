@@ -14,26 +14,27 @@ def encode_(encoded_list):
     return json.dumps(dict(encoded_list), indent=2)
 
 
-def sort_(sortable_list):
-    return sorted(sortable_list, key=lambda items: items[0][2])
+def sort_(sortable_dict):
+    sorted_keys = sorted(sortable_dict, key=lambda items: items[2])
+    return [(key, sortable_dict[key]) for key in sorted_keys]
 
 
 def get_result_list(file_path1, file_path2):
     dict1 = get_dict_from_(file_path1)
     dict2 = get_dict_from_(file_path2)
-    result = []
+    result = dict()
     for key in dict1.keys():
         if dict2.get(key):
             if dict1[key] == dict2[key]:
-                result.append((f'  {key}', dict1.get(key)))
+                result[f'  {key}'] = dict1.get(key)
             else:
-                result.append((f'- {key}', dict1.get(key)))
-                result.append((f'+ {key}', dict2.get(key)))
+                result[f'- {key}'] = dict1.get(key)
+                result[f'+ {key}'] = dict2.get(key)
         else:
-            result.append((f'- {key}', dict1.get(key)))
+            result[f'- {key}'] = dict1.get(key)
     for key in dict2.keys():
         if dict1.get(key) is None:
-            result.append((f'+ {key}', dict2.get(key)))
+            result[f'+ {key}'] = dict2[key]
     return result
 
 
