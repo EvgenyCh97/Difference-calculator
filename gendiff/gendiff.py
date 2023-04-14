@@ -1,6 +1,7 @@
 import json
 import yaml
 from yaml import CLoader as Loader
+import gendiff.stylish as stylish
 
 
 def get_dict_from_(file_path):
