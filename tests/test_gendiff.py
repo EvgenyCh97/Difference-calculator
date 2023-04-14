@@ -1,7 +1,6 @@
-import pytest
 import json
+import pytest
 from gendiff import stylish, gendiff
-
 
 JSON1 = 'tests/fixtures/file3.json'
 JSON2 = 'tests/fixtures/file4.json'
