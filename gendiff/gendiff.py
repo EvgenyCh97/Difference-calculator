@@ -30,26 +30,27 @@ def compare_files():
     def inner(dict1, dict2, depth=1):
         result = dict()
         for key in dict1.keys():
-            if dict2.get(key) and type(dict1[key]) == dict and type(
-                    dict2[key]) == dict:
+            if dict2.get(key) and type(dict1.get(key)) == dict and type(
+                    dict2.get(key)) == dict:
                 result[key] = {'type': 'nested',
-                               'value': inner(dict1[key], dict2[key],
+                               'value': inner(dict1.get(key), dict2.get(key),
                                               depth + 1), 'depth': depth}
             elif dict2.get(key):
-                if dict1[key] == dict2[key]:
+                if dict1.get(key) == dict2.get(key):
                     result[key] = {'type': 'unchanged', 'value': dict1.get(key),
                                    'depth': depth}
                 else:
-                    if type(dict1[key]) == dict:
+                    if type(dict1.get(key)) == dict:
                         result[key] = {'type': 'changed',
                                        'value': dict2.get(key),
-                                       'old_value': inner(dict1[key],
-                                                          dict1[key],
+                                       'old_value': inner(dict1.get(key),
+                                                          dict1.get(key),
                                                           depth + 1),
                                        'depth': depth}
-                    elif type(dict2[key]) == dict:
+                    elif type(dict2.get(key)) == dict:
                         result[key] = {'type': 'changed',
-                                       'value': inner(dict2[key], dict2[key],
+                                       'value': inner(dict2.get(key),
+                                                      dict2.get(key),
                                                       depth + 1),
                                        'old_value': dict1.get(key),
                                        'depth': depth}
@@ -59,24 +60,23 @@ def compare_files():
                                        'old_value': dict1.get(key),
                                        'depth': depth}
             else:
-                if type(dict1[key]) == dict:
-                    result[key] = {'type': 'deleted', 'value': inner(dict1[key],
-                                                                     dict1[key],
-                                                                     depth + 1),
+                if type(dict1.get(key)) == dict:
+                    result[key] = {'type': 'deleted',
+                                   'value': inner(dict1.get(key),
+                                                  dict1.get(key), depth + 1),
                                    'depth': depth}
                 else:
                     result[key] = {'type': 'deleted', 'value': dict1.get(key),
                                    'depth': depth}
-        for key in dict2.keys():
-            if dict1.get(key) is None:
-                if type(dict2[key]) == dict:
-                    result[key] = {'type': 'added',
-                                   'value': inner(dict2.get(key),
-                                                  dict2.get(key), depth + 1),
-                                   'depth': depth}
-                else:
-                    result[key] = {'type': 'added', 'value': dict2.get(key),
-                                   'depth': depth}
+        for key in [key for key in dict2.keys() if dict1.get(key) is None]:
+            if type(dict2[key]) == dict:
+                result[key] = {'type': 'added',
+                               'value': inner(dict2.get(key),
+                                              dict2.get(key), depth + 1),
+                               'depth': depth}
+            else:
+                result[key] = {'type': 'added', 'value': dict2.get(key),
+                               'depth': depth}
         return result
     return inner
 
