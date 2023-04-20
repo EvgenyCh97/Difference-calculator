@@ -1,4 +1,5 @@
 import gendiff.stylish as stylish
+import gendiff.plain as plain
 import json
 import yaml
 from yaml import CLoader as Loader
@@ -81,12 +82,16 @@ def compare_files():
     return inner
 
 
-def generate_diff(file_path1, file_path2):
+def generate_diff(file_path1, file_path2, format_name='stylish'):
     dict1 = convert_bool_and_null_to_str(get_dict_from_(file_path1))
     dict2 = convert_bool_and_null_to_str(get_dict_from_(file_path2))
     compare = compare_files()
-    diff = '{\n'
-    result_list = stylish.get_stylish(compare(dict1, dict2))
+    if format_name == 'stylish':
+        diff = '{\n'
+        result_list = stylish.get_stylish(compare(dict1, dict2))
+    if format_name == 'plain':
+        diff = ''
+        result_list = plain.get_plain(compare(dict1, dict2))
     for string in result_list:
         if string == result_list[-1]:
             diff += string

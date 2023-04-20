@@ -5,10 +5,7 @@ from gendiff.parser import ARGS
 
 
 def main():
-    if ARGS.format == 'stylish':
-        print(generate_diff(ARGS.filepath_1, ARGS.filepath_2))
-    else:
-        print(f'{ARGS.format}')
+    print(generate_diff(ARGS.filepath_1, ARGS.filepath_2, ARGS.format))
 
 
 if __name__ == '__main__':
