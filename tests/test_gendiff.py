@@ -1,6 +1,7 @@
 import json
 import pytest
-from gendiff import gendiff, stylish, plain
+from gendiff import gendiff
+from gendiff.views import stylish, plain
 
 JSON1 = 'tests/fixtures/file1.json'
 JSON2 = 'tests/fixtures/file2.json'
