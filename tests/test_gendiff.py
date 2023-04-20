@@ -1,9 +1,9 @@
 import json
 import pytest
-from gendiff import stylish, gendiff
+from gendiff import gendiff, stylish, plain
 
-JSON1 = 'tests/fixtures/file3.json'
-JSON2 = 'tests/fixtures/file4.json'
+JSON1 = 'tests/fixtures/file1.json'
+JSON2 = 'tests/fixtures/file2.json'
 YAML1 = 'tests/fixtures/file1.yaml'
 YAML2 = 'tests/fixtures/file2.yml'
 
@@ -66,6 +66,27 @@ def test_get_stylish():
                       '        foo: bar', '        nest: str', '    }', '}']
 
 
+def test_get_plain():
+    result = plain.get_plain({
+        'group1':
+            {'type': 'nested',
+             'value': {
+                 'baz': {
+                     'type': 'changed', 'value': 'bars',
+                     'old_value': 'bas', 'depth': 2},
+                 'foo': {'type': 'unchanged', 'value': 'bar', 'depth': 2},
+                 'nest': {
+                     'type': 'changed', 'value': 'str',
+                     'old_value': {
+                         'key': {
+                             'type':
+                                 'unchanged', 'value': 'value', 'depth': 3}},
+                     'depth': 2}}, 'depth': 1}})
+    assert result == [
+        "Property 'group1.baz' was updated. From 'bas' to 'bars'",
+        "Property 'group1.nest' was updated. From [complex value] to 'str'"]
+
+
 def test_compare_files():
     compare = gendiff.compare_files()
     result = compare(
@@ -101,6 +122,10 @@ def test_generate_diff():
     result = gendiff.generate_diff(JSON1, JSON2)
     with open('tests/fixtures/json_diff', 'r') as json_diff:
         assert result == json_diff.read()
+
+    result = gendiff.generate_diff(JSON1, JSON2, format_name='plain')
+    with open('tests/fixtures/plain_diff', 'r') as plain_diff:
+        assert result == plain_diff.read()
 
     result = gendiff.generate_diff(YAML1, YAML2)
     with open('tests/fixtures/yaml_diff', 'r') as yaml_diff:
