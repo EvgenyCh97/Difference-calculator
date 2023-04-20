@@ -121,13 +121,18 @@ def test_compare_files():
 
 def test_generate_diff():
     result = gendiff.generate_diff(JSON1, JSON2)
-    with open('tests/fixtures/json_diff', 'r') as json_diff:
-        assert result == json_diff.read()
+    with open('tests/fixtures/diff', 'r') as diff:
+        assert result == diff.read()
+
+    result = gendiff.generate_diff(YAML1, YAML2)
+    with open('tests/fixtures/yaml_diff', 'r') as yaml_diff:
+        assert result == yaml_diff.read()
 
     result = gendiff.generate_diff(JSON1, JSON2, format_name='plain')
     with open('tests/fixtures/plain_diff', 'r') as plain_diff:
         assert result == plain_diff.read()
 
-    result = gendiff.generate_diff(YAML1, YAML2)
-    with open('tests/fixtures/yaml_diff', 'r') as yaml_diff:
-        assert result == yaml_diff.read()
+    result = gendiff.generate_diff(JSON1, JSON2, format_name='json')
+    assert type(result) == dict
+    with open('tests/fixtures/json_diff', 'r') as json_diff:
+        assert result == json.loads(json_diff.read())
