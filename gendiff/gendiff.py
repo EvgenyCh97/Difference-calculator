@@ -91,6 +91,8 @@ def generate_diff(file_path1, file_path2, format_name='stylish'):
     if format_name == 'plain':
         diff = ''
         result_list = plain.get_plain(compare(dict1, dict2))
+    if format_name == 'json':
+        return compare(dict1, dict2)
     for string in result_list:
         if string == result_list[-1]:
             diff += string
