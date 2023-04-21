@@ -12,16 +12,12 @@ def get_dict_from_(file_path):
 
 
 def convert_bool_and_null_to_str(tree):
-    for elem in tree:
-        if type(tree[elem]) != dict:
-            if tree[elem] is None:
-                tree[elem] = 'null'
-            elif tree[elem] is True:
-                tree[elem] = 'true'
-            elif tree[elem] is False:
-                tree[elem] = 'false'
+    for node in tree:
+        value = tree[node]
+        if type(value) != dict:
+            tree[node] = json.dumps(value).replace('"', '')
         else:
-            children = tree[elem]
+            children = value
             convert_bool_and_null_to_str(children)
     return tree
 
