@@ -1,5 +1,3 @@
-import json
-import pytest
 from gendiff import gendiff
 from gendiff.views import stylish, plain
 
