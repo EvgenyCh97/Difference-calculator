@@ -26,12 +26,12 @@ def compare_files():
     def inner(dict1, dict2, depth=1):
         result = dict()
         for key in dict1.keys():
-            if dict2.get(key) and type(dict1.get(key)) == dict and type(
+            if key in dict2.keys() and type(dict1.get(key)) == dict and type(
                     dict2.get(key)) == dict:
                 result[key] = {'type': 'nested',
                                'value': inner(dict1.get(key), dict2.get(key),
                                               depth + 1), 'depth': depth}
-            elif dict2.get(key):
+            elif key in dict2.keys():
                 if dict1.get(key) == dict2.get(key):
                     result[key] = {'type': 'unchanged', 'value': dict1.get(key),
                                    'depth': depth}
