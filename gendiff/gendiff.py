@@ -1,6 +1,6 @@
-from gendiff.views import stylish, plain
 import json
 import yaml
+from gendiff.views import stylish, plain
 from yaml import CLoader as Loader
 
 
