@@ -133,6 +133,5 @@ def test_generate_diff():
         assert result == plain_diff.read()
 
     result = gendiff.generate_diff(JSON1, JSON2, format_name='json')
-    assert type(result) == dict
     with open('tests/fixtures/json_diff', 'r') as json_diff:
-        assert result == json.loads(json_diff.read())
+        assert result == json_diff.read()
