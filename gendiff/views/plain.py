@@ -24,7 +24,7 @@ def get_plain(target_dict):
                 if type(comparison_dict[key]['old_value']) == dict:
                     result.append(f'Property \'{"".join(path)}{key}\' was '
                                   f'updated. From [complex value] to {value}')
-                elif type(value) == dict:
+                elif type(comparison_dict[key]['value']) == dict:
                     result.append(f'Property \'{"".join(path)}{key}\' '
                                   f'was updated. From {old_value} to '
                                   f'[complex value]')
