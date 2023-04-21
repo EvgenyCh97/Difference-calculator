@@ -7,20 +7,23 @@ def get_plain(target_dict):
             current_depth = comparison_dict[key]['depth']
             if current_depth == 1:
                 path = []
-            if comparison_dict[key]['value'] in ['true', 'false', 'null']:
-                value = comparison_dict[key]['value']
-            else:
+            if comparison_dict[key]['value'] not in [
+                'true', 'false', 'null'] and \
+                    type(comparison_dict[key]['value']) == str:
                 value = f'\'{comparison_dict[key]["value"]}\''
+            else:
+                value = comparison_dict[key]["value"]
             if comparison_dict[key]['type'] == 'nested':
                 children = comparison_dict[key]['value']
                 path.append(f'{key}.')
                 inner(children, path)
             if comparison_dict[key]['type'] == 'changed':
-                if comparison_dict[key]['old_value'] in ['true', 'false',
-                                                         'null']:
-                    old_value = comparison_dict[key]['old_value']
-                else:
+                if comparison_dict[key]['old_value'] not in [
+                    'true', 'false', 'null'] and \
+                        type(comparison_dict[key]['old_value']) == str:
                     old_value = f'\'{comparison_dict[key]["old_value"]}\''
+                else:
+                    old_value = comparison_dict[key]['old_value']
                 if type(comparison_dict[key]['old_value']) == dict:
                     result.append(f'Property \'{"".join(path)}{key}\' was '
                                   f'updated. From [complex value] to {value}')
