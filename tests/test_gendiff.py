@@ -47,12 +47,12 @@ def test_convert_value_to_str():
         'setting2': None,
         'setting3': True,
         'setting6': {
-            'key': 'value',
+            'key': 1,
             'doge': {
                 'wow': ''}}}})
     assert result == {'common': {
         'setting1': 'false', 'setting2': 'null', 'setting3': 'true',
-        'setting6': {'key': 'value', 'doge': {'wow': ''}}}}
+        'setting6': {'key': 1, 'doge': {'wow': ''}}}}
 
 
 def test_get_stylish():

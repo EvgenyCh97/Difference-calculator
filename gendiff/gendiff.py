@@ -15,7 +15,10 @@ def convert_value_to_str(tree):
     for node in tree:
         value = tree[node]
         if type(value) != dict:
-            tree[node] = json.dumps(value).replace('"', '')
+            if type(value) in [int, float]:
+                pass
+            else:
+                tree[node] = json.dumps(value).replace('"', '')
         else:
             children = value
             convert_value_to_str(children)
