@@ -11,14 +11,14 @@ def get_dict_from_(file_path):
         return json.load(open(file_path))
 
 
-def convert_bool_and_null_to_str(tree):
+def convert_value_to_str(tree):
     for node in tree:
         value = tree[node]
         if type(value) != dict:
             tree[node] = json.dumps(value).replace('"', '')
         else:
             children = value
-            convert_bool_and_null_to_str(children)
+            convert_value_to_str(children)
     return tree
 
 
@@ -78,8 +78,8 @@ def compare_files():
 
 
 def generate_diff(file_path1, file_path2, format_name='stylish'):
-    dict1 = convert_bool_and_null_to_str(get_dict_from_(file_path1))
-    dict2 = convert_bool_and_null_to_str(get_dict_from_(file_path2))
+    dict1 = convert_value_to_str(get_dict_from_(file_path1))
+    dict2 = convert_value_to_str(get_dict_from_(file_path2))
     compare = compare_files()
     if format_name == 'stylish':
         diff = '{\n'

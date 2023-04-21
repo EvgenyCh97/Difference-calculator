@@ -41,8 +41,8 @@ def test_get_dict_from_():
     assert result == {'timeout': 20, 'verbose': True, 'host': 'hexlet.io'}
 
 
-def test_convert_bool_and_null_to_str():
-    result = gendiff.convert_bool_and_null_to_str({'common': {
+def test_convert_value_to_str():
+    result = gendiff.convert_value_to_str({'common': {
         'setting1': False,
         'setting2': None,
         'setting3': True,
