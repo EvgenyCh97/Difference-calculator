@@ -30,4 +30,4 @@ A Difference calculator is a program that determines the difference between two 
 
 
 ### Package work example:
-[![asciicast](https://asciinema.org/a/X8jg0egN5LmTfN1NLKRycGKBL.svg)](https://asciinema.org/a/X8jg0egN5LmTfN1NLKRycGKBL)
+[![asciicast](https://asciinema.org/a/898PhaGotOGnnrjENaqBXLmNA.svg)](https://asciinema.org/a/898PhaGotOGnnrjENaqBXLmNA)
