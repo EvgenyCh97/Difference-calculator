@@ -1,5 +1,5 @@
 from gendiff import gendiff
-from gendiff.views import stylish, plain
+from gendiff.formatters import stylish, plain
 
 JSON1 = 'tests/fixtures/file1.json'
 JSON2 = 'tests/fixtures/file2.json'
