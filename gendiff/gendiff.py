@@ -83,8 +83,8 @@ def compare_files(dict1, dict2, depth=1):
 
 
 def generate_diff(file_path1, file_path2, format_name='stylish'):
-    dict1 = convert_value_to_str(get_dict_from_(file_path1))
-    dict2 = convert_value_to_str(get_dict_from_(file_path2))
+    dict1 = get_dict_from_(file_path1)
+    dict2 = get_dict_from_(file_path2)
     compare = compare_files(dict1, dict2)
     if format_name == 'stylish':
         diff = '{\n'
@@ -99,4 +99,4 @@ def generate_diff(file_path1, file_path2, format_name='stylish'):
             diff += string
         else:
             diff += string + '\n'
-    return diff.replace('"', '')
+    return diff

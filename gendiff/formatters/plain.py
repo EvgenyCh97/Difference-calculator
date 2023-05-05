@@ -1,43 +1,38 @@
+import json
+
+
 def get_plain(target_dict):
     result = list()
 
     def inner(comparison_dict, path=[]):
         sorted_keys = sorted(comparison_dict)
         for key in sorted_keys:
-            current_depth = comparison_dict[key]['depth']
-            if current_depth == 1:
+
+            value = converter(comparison_dict[key]['value'])
+            depth = comparison_dict[key]['depth']
+            key_type = comparison_dict[key]['type']
+
+            if depth == 1:
                 path = []
-            if comparison_dict[key]['value'] not in [
-                'true', 'false', 'null'] and \
-                    type(comparison_dict[key]['value']) == str:
-                value = f'\'{comparison_dict[key]["value"]}\''
-            else:
-                value = comparison_dict[key]["value"]
-            if comparison_dict[key]['type'] == 'nested':
-                children = comparison_dict[key]['value']
+            if key_type == 'nested':
                 path.append(f'{key}.')
-                inner(children, path)
-            if comparison_dict[key]['type'] == 'changed':
-                if comparison_dict[key]['old_value'] not in [
-                    'true', 'false', 'null'] and \
-                        type(comparison_dict[key]['old_value']) == str:
-                    old_value = f'\'{comparison_dict[key]["old_value"]}\''
-                else:
-                    old_value = comparison_dict[key]['old_value']
+                inner(value, path)
+            if key_type == 'changed':
+                old_value = converter(comparison_dict[key]['old_value'])
                 if type(comparison_dict[key]['old_value']) == dict:
                     result.append(f'Property \'{"".join(path)}{key}\' was '
                                   f'updated. From [complex value] to {value}')
-                elif type(comparison_dict[key]['value']) == dict:
+                elif type(value) == dict:
                     result.append(f'Property \'{"".join(path)}{key}\' '
                                   f'was updated. From {old_value} to '
                                   f'[complex value]')
                 else:
                     result.append(f'Property \'{"".join(path)}{key}\' '
                                   f'was updated. From {old_value} to {value}')
-            if comparison_dict[key]['type'] == 'deleted':
+            if key_type == 'deleted':
                 result.append(f'Property \'{"".join(path)}{key}\' was removed')
-            if comparison_dict[key]['type'] == 'added':
-                if type(comparison_dict[key]['value']) == dict:
+            if key_type == 'added':
+                if type(value) == dict:
                     result.append(f'Property \'{"".join(path)}{key}\' '
                                   f'was added with value: [complex value]')
                 else:
@@ -48,3 +43,10 @@ def get_plain(target_dict):
 
     inner(target_dict)
     return result
+
+
+def converter(value):
+    if type(value) not in [int, float, dict]:
+        return json.dumps(value).replace('"', "'")
+    else:
+        return value
