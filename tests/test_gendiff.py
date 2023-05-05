@@ -87,8 +87,7 @@ def test_get_plain():
 
 
 def test_compare_files():
-    compare = gendiff.compare_files()
-    result = compare(
+    result = gendiff.compare_files(
         {'group1': {'baz': 'bas', 'foo': 'bar', 'nest': {'key': 'value'}}},
         {'group1': {'foo': 'bar', 'baz': 'bars', 'nest': 'str'}})
     assert result == {'group1': {
@@ -104,7 +103,7 @@ def test_compare_files():
                      'depth': 2}},
         'depth': 1}}
 
-    result = compare(
+    result = gendiff.compare_files(
         {'host': 'hexlet.io', 'timeout': 50,
          'proxy': '123.234.53.22', 'follow': 'false'},
         {'timeout': 20, 'verbose': 'true', 'host': 'hexlet.io'})
