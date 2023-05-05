@@ -7,7 +7,7 @@ def parse_args():
     )
     parser.add_argument('filepath_1', type=str, help='path to first file')
     parser.add_argument('filepath_2', type=str, help='path to second file')
-    parser.add_argument('-f', '--format', type=str, metavar='',
+    parser.add_argument('-f', '--format', choices=['stylish', 'plain', 'json'],
                         default='stylish',
                         help='set format of output (default: "stylish")')
     args = parser.parse_args()
