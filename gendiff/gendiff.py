@@ -6,10 +6,11 @@ from yaml import CLoader as Loader
 
 
 def get_dict_from_(file_path):
-    if file_path.endswith('.yml') or file_path.endswith('.yaml'):
-        return yaml.load(open(file_path), Loader=Loader)
-    if file_path.endswith('.json'):
-        return json.load(open(file_path))
+    with open(file_path, 'r') as file:
+        if file_path.endswith('.yml') or file_path.endswith('.yaml'):
+            return yaml.load(file, Loader=Loader)
+        if file_path.endswith('.json'):
+            return json.load(file)
 
 
 def convert_value_to_str(tree):
