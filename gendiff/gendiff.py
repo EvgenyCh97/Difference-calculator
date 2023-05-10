@@ -73,18 +73,9 @@ def get_diff_dict(dict1, dict2, depth=1):
 def generate_diff(file_path1, file_path2, format_name='stylish'):
     dict1 = get_dict_from_(file_path1)
     dict2 = get_dict_from_(file_path2)
-    compare = compare_files(dict1, dict2)
     if format_name == 'stylish':
-        diff = '{\n'
-        result_list = stylish.get_stylish(compare)
+        return stylish.get_stylish(get_diff_dict(dict1, dict2))
     if format_name == 'plain':
-        diff = ''
-        result_list = plain.get_plain(compare)
+        return plain.get_plain(get_diff_dict(dict1, dict2))
     if format_name == 'json':
-        return get_json(compare)
-    for string in result_list:
-        if string == result_list[-1]:
-            diff += string
-        else:
-            diff += string + '\n'
-    return diff
+        return get_json(get_diff_dict(dict1, dict2))

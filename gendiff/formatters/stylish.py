@@ -1,52 +1,58 @@
 import json
 
 
-def get_stylish(target_dict):
-    result = list()
-
-    def inner(comparison_dict):
-        sorted_keys = sorted(comparison_dict)
-        for key in sorted_keys:
-
-            value = converter(comparison_dict[key]['value'])
-            depth = comparison_dict[key]['depth']
-            key_type = comparison_dict[key]['type']
-
-            if key_type == 'nested':
-                result.append(f'{" " * (4 * depth - 2)}  {key}: ' + '{')
-                inner(value)
-            if key_type == 'changed':
-                old_value = converter(comparison_dict[key]['old_value'])
-                if type(old_value) == dict:
-                    result.append(f'{" " * (4 * depth - 2)}- {key}: ' + '{')
-                    inner(old_value)
-                else:
-                    result.append(
-                        f'{" " * (4 * depth - 2)}- {key}: {old_value}')
-                if type(value) == dict:
-                    result.append(f'{" " * (4 * depth - 2)}+ {key}: ' + '{')
-                    inner(value)
-                else:
-                    result.append(f'{" " * (4 * depth - 2)}+ {key}: {value}')
-            if key_type == 'unchanged':
-                result.append(f'{" " * (4 * depth - 2)}  {key}: {value}')
-            if key_type == 'deleted':
-                if type(value) == dict:
-                    result.append(f'{" " * (4 * depth - 2)}- {key}: ' + '{')
-                    inner(value)
-                else:
-                    result.append(f'{" " * (4 * depth - 2)}- {key}: {value}')
-            if key_type == 'added':
-                if type(value) == dict:
-                    result.append(f'{" " * (4 * depth - 2)}+ {key}: ' + '{')
-                    inner(value)
-                else:
-                    result.append(f'{" " * (4 * depth - 2)}+ {key}: {value}')
-            if key == sorted_keys[-1]:
-                result.append(f'{" " * 4 * (depth - 1)}' + '}')
-
-    inner(target_dict)
+def get_stylish(diff_dict):
+    result = '{\n'
+    diff_list = list()
+    complete_diff_list(diff_dict, diff_list)
+    for string in diff_list:
+        if string == diff_list[-1]:
+            result += string
+        else:
+            result += string + '\n'
     return result
+
+
+def complete_diff_list(diff_dict, diff_list):
+    sorted_keys = sorted(diff_dict)
+    for key in sorted_keys:
+
+        value = converter(diff_dict[key]['value'])
+        depth = diff_dict[key]['depth']
+        key_type = diff_dict[key]['type']
+
+        if key_type == 'nested':
+            diff_list.append(f'{" " * (4 * depth - 2)}  {key}: ' + '{')
+            complete_diff_list(value, diff_list)
+        if key_type == 'changed':
+            old_value = converter(diff_dict[key]['old_value'])
+            if type(old_value) == dict:
+                diff_list.append(f'{" " * (4 * depth - 2)}- {key}: ' + '{')
+                complete_diff_list(old_value, diff_list)
+            else:
+                diff_list.append(
+                    f'{" " * (4 * depth - 2)}- {key}: {old_value}')
+            if type(value) == dict:
+                diff_list.append(f'{" " * (4 * depth - 2)}+ {key}: ' + '{')
+                complete_diff_list(value, diff_list)
+            else:
+                diff_list.append(f'{" " * (4 * depth - 2)}+ {key}: {value}')
+        if key_type == 'unchanged':
+            diff_list.append(f'{" " * (4 * depth - 2)}  {key}: {value}')
+        if key_type == 'deleted':
+            if type(value) == dict:
+                diff_list.append(f'{" " * (4 * depth - 2)}- {key}: ' + '{')
+                complete_diff_list(value, diff_list)
+            else:
+                diff_list.append(f'{" " * (4 * depth - 2)}- {key}: {value}')
+        if key_type == 'added':
+            if type(value) == dict:
+                diff_list.append(f'{" " * (4 * depth - 2)}+ {key}: ' + '{')
+                complete_diff_list(value, diff_list)
+            else:
+                diff_list.append(f'{" " * (4 * depth - 2)}+ {key}: {value}')
+        if key == sorted_keys[-1]:
+            diff_list.append(f'{" " * 4 * (depth - 1)}' + '}')
 
 
 def converter(value):

@@ -1,48 +1,54 @@
 import json
 
 
-def get_plain(target_dict):
-    result = list()
-
-    def inner(comparison_dict, path=[]):
-        sorted_keys = sorted(comparison_dict)
-        for key in sorted_keys:
-
-            value = converter(comparison_dict[key]['value'])
-            depth = comparison_dict[key]['depth']
-            key_type = comparison_dict[key]['type']
-
-            if depth == 1:
-                path = []
-            if key_type == 'nested':
-                path.append(f'{key}.')
-                inner(value, path)
-            if key_type == 'changed':
-                old_value = converter(comparison_dict[key]['old_value'])
-                if type(comparison_dict[key]['old_value']) == dict:
-                    result.append(f'Property \'{"".join(path)}{key}\' was '
-                                  f'updated. From [complex value] to {value}')
-                elif type(value) == dict:
-                    result.append(f'Property \'{"".join(path)}{key}\' '
-                                  f'was updated. From {old_value} to '
-                                  f'[complex value]')
-                else:
-                    result.append(f'Property \'{"".join(path)}{key}\' '
-                                  f'was updated. From {old_value} to {value}')
-            if key_type == 'deleted':
-                result.append(f'Property \'{"".join(path)}{key}\' was removed')
-            if key_type == 'added':
-                if type(value) == dict:
-                    result.append(f'Property \'{"".join(path)}{key}\' '
-                                  f'was added with value: [complex value]')
-                else:
-                    result.append(f'Property \'{"".join(path)}{key}\' '
-                                  f'was added with value: {value}')
-            if key == sorted_keys[-1] and path:
-                path.pop()
-
-    inner(target_dict)
+def get_plain(diff_dict):
+    result = ''
+    diff_list = list()
+    complete_diff_list(diff_dict, diff_list)
+    for string in diff_list:
+        if string == diff_list[-1]:
+            result += string
+        else:
+            result += string + '\n'
     return result
+
+
+def complete_diff_list(diff_dict, diff_list, path=[]):
+    sorted_keys = sorted(diff_dict)
+    for key in sorted_keys:
+
+        value = converter(diff_dict[key]['value'])
+        depth = diff_dict[key]['depth']
+        key_type = diff_dict[key]['type']
+
+        if depth == 1:
+            path = []
+        if key_type == 'nested':
+            path.append(f'{key}.')
+            complete_diff_list(value, diff_list, path)
+        if key_type == 'changed':
+            old_value = converter(diff_dict[key]['old_value'])
+            if type(old_value) == dict:
+                diff_list.append(f'Property \'{"".join(path)}{key}\' was '
+                                 f'updated. From [complex value] to {value}')
+            elif type(value) == dict:
+                diff_list.append(f'Property \'{"".join(path)}{key}\' '
+                                 f'was updated. From {old_value} to '
+                                 f'[complex value]')
+            else:
+                diff_list.append(f'Property \'{"".join(path)}{key}\' '
+                                 f'was updated. From {old_value} to {value}')
+        if key_type == 'deleted':
+            diff_list.append(f'Property \'{"".join(path)}{key}\' was removed')
+        if key_type == 'added':
+            if type(value) == dict:
+                diff_list.append(f'Property \'{"".join(path)}{key}\' '
+                                 f'was added with value: [complex value]')
+            else:
+                diff_list.append(f'Property \'{"".join(path)}{key}\' '
+                                 f'was added with value: {value}')
+        if key == sorted_keys[-1] and path:
+            path.pop()
 
 
 def converter(value):
