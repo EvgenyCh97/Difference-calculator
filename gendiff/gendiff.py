@@ -70,7 +70,9 @@ def compare_files(dict1, dict2, depth=1):
             else:
                 result[key] = {'type': 'deleted', 'value': dict1.get(key),
                                'depth': depth}
-    for key in [key for key in dict2.keys() if dict1.get(key) is None]:
+    added_keys = set(dict2)
+    added_keys.difference_update(set(dict1))
+    for key in added_keys:
         if type(dict2[key]) == dict:
             result[key] = {'type': 'added',
                            'value': compare_files(dict2.get(key),
