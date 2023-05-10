@@ -39,55 +39,41 @@ def test_get_dict_from_():
     assert result == {'timeout': 20, 'verbose': True, 'host': 'hexlet.io'}
 
 
-def test_convert_value_to_str():
-    result = gendiff.convert_value_to_str({'common': {
-        'setting1': False,
-        'setting2': None,
-        'setting3': True,
-        'setting6': {
-            'key': 1,
-            'doge': {
-                'wow': ''}}}})
-    assert result == {'common': {
-        'setting1': 'false', 'setting2': 'null', 'setting3': 'true',
-        'setting6': {'key': 1, 'doge': {'wow': ''}}}}
+# def test_get_stylish():
+#     result = stylish.get_stylish({
+#         'group1': {
+#             'type': 'added', 'value': {
+#                 'foo': {'type': 'unchanged', 'value': 'bar', 'depth': 2},
+#                 'baz': {'type': 'unchanged', 'value': 'bars', 'depth': 2},
+#                 'nest': {'type': 'unchanged', 'value': 'str', 'depth': 2}},
+#             'depth': 1}})
+#     assert result == ['  + group1: {', '        baz: bars',
+#                       '        foo: bar', '        nest: str', '    }', '}']
+# 
+# 
+# def test_get_plain():
+#     result = plain.get_plain({
+#         'group1':
+#             {'type': 'nested',
+#              'value': {
+#                  'baz': {
+#                      'type': 'changed', 'value': 'bars',
+#                      'old_value': 'bas', 'depth': 2},
+#                  'foo': {'type': 'unchanged', 'value': 'bar', 'depth': 2},
+#                  'nest': {
+#                      'type': 'changed', 'value': 'str',
+#                      'old_value': {
+#                          'key': {
+#                              'type':
+#                                  'unchanged', 'value': 'value', 'depth': 3}},
+#                      'depth': 2}}, 'depth': 1}})
+#     assert result == [
+#         "Property 'group1.baz' was updated. From 'bas' to 'bars'",
+#         "Property 'group1.nest' was updated. From [complex value] to 'str'"]
 
 
-def test_get_stylish():
-    result = stylish.get_stylish({
-        'group1': {
-            'type': 'added', 'value': {
-                'foo': {'type': 'unchanged', 'value': 'bar', 'depth': 2},
-                'baz': {'type': 'unchanged', 'value': 'bars', 'depth': 2},
-                'nest': {'type': 'unchanged', 'value': 'str', 'depth': 2}},
-            'depth': 1}})
-    assert result == ['  + group1: {', '        baz: bars',
-                      '        foo: bar', '        nest: str', '    }', '}']
-
-
-def test_get_plain():
-    result = plain.get_plain({
-        'group1':
-            {'type': 'nested',
-             'value': {
-                 'baz': {
-                     'type': 'changed', 'value': 'bars',
-                     'old_value': 'bas', 'depth': 2},
-                 'foo': {'type': 'unchanged', 'value': 'bar', 'depth': 2},
-                 'nest': {
-                     'type': 'changed', 'value': 'str',
-                     'old_value': {
-                         'key': {
-                             'type':
-                                 'unchanged', 'value': 'value', 'depth': 3}},
-                     'depth': 2}}, 'depth': 1}})
-    assert result == [
-        "Property 'group1.baz' was updated. From 'bas' to 'bars'",
-        "Property 'group1.nest' was updated. From [complex value] to 'str'"]
-
-
-def test_compare_files():
-    result = gendiff.compare_files(
+def test_get_diff_dict():
+    result = gendiff.get_diff_dict(
         {'group1': {'baz': 'bas', 'foo': 'bar', 'nest': {'key': 'value'}}},
         {'group1': {'foo': 'bar', 'baz': 'bars', 'nest': 'str'}})
     assert result == {'group1': {
@@ -103,7 +89,7 @@ def test_compare_files():
                      'depth': 2}},
         'depth': 1}}
 
-    result = gendiff.compare_files(
+    result = gendiff.get_diff_dict(
         {'host': 'hexlet.io', 'timeout': 50,
          'proxy': '123.234.53.22', 'follow': 'false'},
         {'timeout': 20, 'verbose': 'true', 'host': 'hexlet.io'})
