@@ -5,12 +5,19 @@ from gendiff.formatters.json import get_json
 from yaml import CLoader as Loader
 
 
-def get_dict_from_(file_path):
+def read_file_(file_path):
     with open(file_path, 'r') as file:
-        if file_path.endswith('.yml') or file_path.endswith('.yaml'):
-            return yaml.load(file, Loader=Loader)
-        if file_path.endswith('.json'):
-            return json.load(file)
+        return file.readlines()
+
+
+def get_dict_from_(file_path):
+    result = ''
+    for str in read_file_(file_path):
+        result += str
+    if file_path.endswith('.yml') or file_path.endswith('.yaml'):
+        return yaml.load(result, Loader=Loader)
+    if file_path.endswith('.json'):
+        return json.loads(result)
 
 
 def get_diff_dict(dict1, dict2, depth=1):
