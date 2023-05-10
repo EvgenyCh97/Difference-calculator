@@ -1,5 +1,4 @@
 from gendiff import gendiff
-from gendiff.formatters import stylish, plain
 
 JSON1 = 'tests/fixtures/file1.json'
 JSON2 = 'tests/fixtures/file2.json'
@@ -37,39 +36,6 @@ def test_get_dict_from_():
 
     result = gendiff.get_dict_from_(YAML2)
     assert result == {'timeout': 20, 'verbose': True, 'host': 'hexlet.io'}
-
-
-# def test_get_stylish():
-#     result = stylish.get_stylish({
-#         'group1': {
-#             'type': 'added', 'value': {
-#                 'foo': {'type': 'unchanged', 'value': 'bar', 'depth': 2},
-#                 'baz': {'type': 'unchanged', 'value': 'bars', 'depth': 2},
-#                 'nest': {'type': 'unchanged', 'value': 'str', 'depth': 2}},
-#             'depth': 1}})
-#     assert result == ['  + group1: {', '        baz: bars',
-#                       '        foo: bar', '        nest: str', '    }', '}']
-# 
-# 
-# def test_get_plain():
-#     result = plain.get_plain({
-#         'group1':
-#             {'type': 'nested',
-#              'value': {
-#                  'baz': {
-#                      'type': 'changed', 'value': 'bars',
-#                      'old_value': 'bas', 'depth': 2},
-#                  'foo': {'type': 'unchanged', 'value': 'bar', 'depth': 2},
-#                  'nest': {
-#                      'type': 'changed', 'value': 'str',
-#                      'old_value': {
-#                          'key': {
-#                              'type':
-#                                  'unchanged', 'value': 'value', 'depth': 3}},
-#                      'depth': 2}}, 'depth': 1}})
-#     assert result == [
-#         "Property 'group1.baz' was updated. From 'bas' to 'bars'",
-#         "Property 'group1.nest' was updated. From [complex value] to 'str'"]
 
 
 def test_get_diff_dict():
