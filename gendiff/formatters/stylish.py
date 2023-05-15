@@ -5,15 +5,8 @@ LEFT_SHIFT = 2
 
 
 def get_stylish(diff_dict):
-    result = '{\n'
-    diff_list = list()
-    complete_diff_list(diff_dict, diff_list)
-    for string in diff_list:
-        if string == diff_list[-1]:
-            result += string
-        else:
-            result += string + '\n'
-    return result
+    diff_list = complete_diff_list(diff_dict, list())
+    return '{\n' + '\n'.join(diff_list)
 
 
 def complete_diff_list(diff_dict, diff_list):
