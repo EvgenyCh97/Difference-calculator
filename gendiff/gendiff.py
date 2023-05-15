@@ -11,9 +11,8 @@ def read_file(file_path):
 
 
 def get_dict_from(file_path):
-    result = ''
-    for str in read_file(file_path):
-        result += str
+    lines = read_file(file_path)
+    result = ''.join(lines)
     if file_path.endswith('.yml') or file_path.endswith('.yaml'):
         return yaml.load(result, Loader=Loader)
     if file_path.endswith('.json'):
