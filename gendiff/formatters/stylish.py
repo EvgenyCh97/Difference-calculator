@@ -9,7 +9,7 @@ def get_stylish(diff_dict):
     return '{\n' + '\n'.join(diff_list)
 
 
-def complete_diff_list(diff_dict, diff_list):
+def complete_diff_list(diff_dict, diff_list: list):
     sorted_keys = sorted(diff_dict)
     for key in sorted_keys:
 
@@ -66,6 +66,7 @@ def complete_diff_list(diff_dict, diff_list):
                     f'{key}: {value}')
         if key == sorted_keys[-1]:
             diff_list.append(f'{" " * SPACES_PER_LVL * (depth - 1)}' + '}')
+    return diff_list
 
 
 def converter(value):
