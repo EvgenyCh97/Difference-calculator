@@ -5,14 +5,14 @@ from gendiff.formatters.json import get_json
 from yaml import CLoader as Loader
 
 
-def read_file_(file_path):
+def read_file(file_path):
     with open(file_path, 'r') as file:
         return file.readlines()
 
 
-def get_dict_from_(file_path):
+def get_dict_from(file_path):
     result = ''
-    for str in read_file_(file_path):
+    for str in read_file(file_path):
         result += str
     if file_path.endswith('.yml') or file_path.endswith('.yaml'):
         return yaml.load(result, Loader=Loader)
@@ -78,8 +78,8 @@ def get_diff_dict(dict1, dict2, depth=1):
 
 
 def generate_diff(file_path1, file_path2, format_name='stylish'):
-    dict1 = get_dict_from_(file_path1)
-    dict2 = get_dict_from_(file_path2)
+    dict1 = get_dict_from(file_path1)
+    dict2 = get_dict_from(file_path2)
     if format_name == 'stylish':
         return stylish.get_stylish(get_diff_dict(dict1, dict2))
     if format_name == 'plain':

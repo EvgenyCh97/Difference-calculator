@@ -6,8 +6,8 @@ YAML1 = 'tests/fixtures/file1.yaml'
 YAML2 = 'tests/fixtures/file2.yml'
 
 
-def test_get_dict_from_():
-    result = gendiff.get_dict_from_(JSON1)
+def test_get_dict_from():
+    result = gendiff.get_dict_from(JSON1)
     assert result == {'common': {
         'setting1': 'Value 1',
         'setting2': 200,
@@ -18,7 +18,7 @@ def test_get_dict_from_():
                    'nest': {'key': 'value'}},
         'group2': {'abc': 12345, 'deep': {'id': 45}}}
 
-    result = gendiff.get_dict_from_(JSON2)
+    result = gendiff.get_dict_from(JSON2)
     assert result == {'common': {
         'follow': False,
         'setting1': 'Value 1',
@@ -30,11 +30,11 @@ def test_get_dict_from_():
         'group1': {'foo': 'bar', 'baz': 'bars', 'nest': 'str'},
         'group3': {'deep': {'id': {'number': 45}}, 'fee': 100500}}
 
-    result = gendiff.get_dict_from_(YAML1)
+    result = gendiff.get_dict_from(YAML1)
     assert result == {'host': 'hexlet.io', 'timeout': 50,
                       'proxy': '123.234.53.22', 'follow': False}
 
-    result = gendiff.get_dict_from_(YAML2)
+    result = gendiff.get_dict_from(YAML2)
     assert result == {'timeout': 20, 'verbose': True, 'host': 'hexlet.io'}
 
 
