@@ -19,60 +19,49 @@ def get_dict_from(file_path):
         return json.loads(result)
 
 
-def get_diff_dict(dict1, dict2, depth=1):
+def get_diff_dict(dict1, dict2):
     diff_dict = dict()
     for key in dict1.keys():
         if key in dict2.keys() and type(dict1.get(key)) == dict and type(
                 dict2.get(key)) == dict:
             diff_dict[key] = {'type': 'nested',
                               'value': get_diff_dict(dict1.get(key),
-                                                     dict2.get(key),
-                                                     depth + 1), 'depth': depth}
+                                                     dict2.get(key))}
         elif key in dict2.keys():
             if dict1.get(key) == dict2.get(key):
-                diff_dict[key] = {'type': 'unchanged', 'value': dict1.get(key),
-                                  'depth': depth}
+                diff_dict[key] = {'type': 'unchanged', 'value': dict1.get(key)}
             else:
                 if type(dict1.get(key)) == dict:
-                    diff_dict[key] = {'type': 'changed',
-                                      'value': dict2.get(key),
-                                      'old_value': get_diff_dict(dict1.get(key),
-                                                                 dict1.get(key),
-                                                                 depth + 1),
-                                      'depth': depth}
+                    diff_dict[key] = {
+                        'type': 'changed',
+                        'value': dict2.get(key),
+                        'old_value': get_diff_dict(dict1.get(key),
+                                                   dict1.get(key))}
                 elif type(dict2.get(key)) == dict:
-                    diff_dict[key] = {'type': 'changed',
-                                      'value': get_diff_dict(dict2.get(key),
-                                                             dict2.get(key),
-                                                             depth + 1),
-                                      'old_value': dict1.get(key),
-                                      'depth': depth}
+                    diff_dict[key] = {
+                        'type': 'changed',
+                        'value': get_diff_dict(dict2.get(key), dict2.get(key)),
+                        'old_value': dict1.get(key)}
                 else:
                     diff_dict[key] = {'type': 'changed',
                                       'value': dict2.get(key),
-                                      'old_value': dict1.get(key),
-                                      'depth': depth}
+                                      'old_value': dict1.get(key)}
         else:
             if type(dict1.get(key)) == dict:
                 diff_dict[key] = {'type': 'deleted',
                                   'value': get_diff_dict(dict1.get(key),
-                                                         dict1.get(key),
-                                                         depth + 1),
-                                  'depth': depth}
+                                                         dict1.get(key))}
             else:
-                diff_dict[key] = {'type': 'deleted', 'value': dict1.get(key),
-                                  'depth': depth}
+                diff_dict[key] = {'type': 'deleted', 'value': dict1.get(key)}
     added_keys = set(dict2)
     added_keys.difference_update(set(dict1))
     for key in added_keys:
         if type(dict2[key]) == dict:
             diff_dict[key] = {'type': 'added',
                               'value': get_diff_dict(dict2.get(key),
-                                                     dict2.get(key), depth + 1),
-                              'depth': depth}
+                                                     dict2.get(key))}
         else:
-            diff_dict[key] = {'type': 'added', 'value': dict2.get(key),
-                              'depth': depth}
+            diff_dict[key] = {'type': 'added', 'value': dict2.get(key)}
     return diff_dict
 
 

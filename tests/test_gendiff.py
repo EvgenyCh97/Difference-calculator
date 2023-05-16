@@ -45,27 +45,26 @@ def test_get_diff_dict():
     assert result == {'group1': {
         'type': 'nested', 'value': {
             'baz': {'type': 'changed',
-                    'value': 'bars', 'old_value': 'bas', 'depth': 2},
-            'foo': {'type': 'unchanged', 'value': 'bar', 'depth': 2},
+                    'value': 'bars', 'old_value': 'bas'},
+            'foo': {'type': 'unchanged', 'value': 'bar'},
             'nest': {'type': 'changed',
                      'value': 'str',
                      'old_value': {
                          'key': {'type': 'unchanged',
-                                 'value': 'value', 'depth': 3}},
-                     'depth': 2}},
-        'depth': 1}}
+                                 'value': 'value'}},
+                     }},
+        }}
 
     result = gendiff.get_diff_dict(
         {'host': 'hexlet.io', 'timeout': 50,
          'proxy': '123.234.53.22', 'follow': 'false'},
         {'timeout': 20, 'verbose': 'true', 'host': 'hexlet.io'})
     assert result == {
-        'host': {'type': 'unchanged', 'value': 'hexlet.io', 'depth': 1},
-        'timeout': {'type': 'changed', 'value': 20, 'old_value': 50,
-                    'depth': 1},
-        'proxy': {'type': 'deleted', 'value': '123.234.53.22', 'depth': 1},
-        'follow': {'type': 'deleted', 'value': 'false', 'depth': 1},
-        'verbose': {'type': 'added', 'value': 'true', 'depth': 1}}
+        'host': {'type': 'unchanged', 'value': 'hexlet.io'},
+        'timeout': {'type': 'changed', 'value': 20, 'old_value': 50},
+        'proxy': {'type': 'deleted', 'value': '123.234.53.22'},
+        'follow': {'type': 'deleted', 'value': 'false'},
+        'verbose': {'type': 'added', 'value': 'true'}}
 
 
 def test_generate_diff():

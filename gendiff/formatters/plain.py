@@ -13,19 +13,18 @@ def get_plain(diff_dict):
     return result
 
 
-def complete_diff_list(diff_dict, diff_list, path=[]):
+def complete_diff_list(diff_dict, diff_list, path=[], depth_lvl=1):
     sorted_keys = sorted(diff_dict)
     for key in sorted_keys:
 
         value = converter(diff_dict[key]['value'])
-        depth = diff_dict[key]['depth']
         key_type = diff_dict[key]['type']
 
-        if depth == 1:
+        if depth_lvl == 1:
             path = []
         if key_type == 'nested':
             path.append(f'{key}.')
-            complete_diff_list(value, diff_list, path)
+            complete_diff_list(value, diff_list, path, depth_lvl + 1)
         if key_type == 'changed':
             old_value = converter(diff_dict[key]['old_value'])
             if type(old_value) == dict:
