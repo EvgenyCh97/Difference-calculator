@@ -17,7 +17,8 @@ def complete_diff_list(diff_dict, diff_list: list, path=[], depth_lvl=1):
             path = []
         if key_type == 'nested':
             path.append(f'{key}.')
-            complete_diff_list(value, diff_list, path, depth_lvl + 1)
+            children = diff_dict[key]['value']
+            complete_diff_list(children, diff_list, path, depth_lvl + 1)
         if key_type == 'changed':
             old_value = converter(diff_dict[key]['old_value'])
             if type(old_value) == dict:
@@ -33,19 +34,17 @@ def complete_diff_list(diff_dict, diff_list: list, path=[], depth_lvl=1):
         if key_type == 'deleted':
             diff_list.append(f'Property \'{"".join(path)}{key}\' was removed')
         if key_type == 'added':
-            if type(value) == dict:
-                diff_list.append(f'Property \'{"".join(path)}{key}\' '
-                                 f'was added with value: [complex value]')
-            else:
-                diff_list.append(f'Property \'{"".join(path)}{key}\' '
-                                 f'was added with value: {value}')
+            diff_list.append(f'Property \'{"".join(path)}{key}\' '
+                             f'was added with value: {value}')
         if key == sorted_keys[-1] and path:
             path.pop()
     return diff_list
 
 
 def converter(value):
-    if type(value) not in [int, float, dict]:
+    if type(value) == dict:
+        return '[complex value]'
+    elif type(value) not in [int, float]:
         return json.dumps(value).replace('"', "'")
     else:
         return value
