@@ -51,9 +51,7 @@ def test_get_diff_dict():
                      'value': 'str',
                      'old_value': {
                          'key': {'type': 'unchanged',
-                                 'value': 'value'}},
-                     }},
-        }}
+                                 'value': 'value'}}}}}}
 
     result = gendiff.get_diff_dict(
         {'host': 'hexlet.io', 'timeout': 50,

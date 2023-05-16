@@ -11,7 +11,7 @@ test:
 	poetry run pytest
 
 lint:
-	poetry run flake8 gendiff
+	poetry run flake8 gendiff tests
 
 check: selfcheck test lint
 
