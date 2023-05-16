@@ -2,18 +2,11 @@ import json
 
 
 def get_plain(diff_dict):
-    result = ''
-    diff_list = list()
-    complete_diff_list(diff_dict, diff_list)
-    for string in diff_list:
-        if string == diff_list[-1]:
-            result += string
-        else:
-            result += string + '\n'
-    return result
+    diff_list = complete_diff_list(diff_dict, list())
+    return '\n'.join(diff_list)
 
 
-def complete_diff_list(diff_dict, diff_list, path=[], depth_lvl=1):
+def complete_diff_list(diff_dict, diff_list: list, path=[], depth_lvl=1):
     sorted_keys = sorted(diff_dict)
     for key in sorted_keys:
 
@@ -48,6 +41,7 @@ def complete_diff_list(diff_dict, diff_list, path=[], depth_lvl=1):
                                  f'was added with value: {value}')
         if key == sorted_keys[-1] and path:
             path.pop()
+    return diff_list
 
 
 def converter(value):
