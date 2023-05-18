@@ -31,37 +31,15 @@ def get_diff_dict(dict1, dict2):
             if dict1.get(key) == dict2.get(key):
                 diff_dict[key] = {'type': 'unchanged', 'value': dict1.get(key)}
             else:
-                if type(dict1.get(key)) == dict:
-                    diff_dict[key] = {
-                        'type': 'changed',
-                        'value': dict2.get(key),
-                        'old_value': get_diff_dict(dict1.get(key),
-                                                   dict1.get(key))}
-                elif type(dict2.get(key)) == dict:
-                    diff_dict[key] = {
-                        'type': 'changed',
-                        'value': get_diff_dict(dict2.get(key), dict2.get(key)),
-                        'old_value': dict1.get(key)}
-                else:
-                    diff_dict[key] = {'type': 'changed',
-                                      'value': dict2.get(key),
-                                      'old_value': dict1.get(key)}
+                diff_dict[key] = {'type': 'changed',
+                                  'value': dict2.get(key),
+                                  'old_value': dict1.get(key)}
         else:
-            if type(dict1.get(key)) == dict:
-                diff_dict[key] = {'type': 'deleted',
-                                  'value': get_diff_dict(dict1.get(key),
-                                                         dict1.get(key))}
-            else:
-                diff_dict[key] = {'type': 'deleted', 'value': dict1.get(key)}
+            diff_dict[key] = {'type': 'deleted', 'value': dict1.get(key)}
     added_keys = set(dict2)
     added_keys.difference_update(set(dict1))
     for key in added_keys:
-        if type(dict2[key]) == dict:
-            diff_dict[key] = {'type': 'added',
-                              'value': get_diff_dict(dict2.get(key),
-                                                     dict2.get(key))}
-        else:
-            diff_dict[key] = {'type': 'added', 'value': dict2.get(key)}
+        diff_dict[key] = {'type': 'added', 'value': dict2.get(key)}
     return diff_dict
 
 

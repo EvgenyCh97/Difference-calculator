@@ -10,6 +10,7 @@ def get_stylish(diff_dict):
 
 
 def complete_diff_list(diff_dict, diff_list: list, depth_lvl=1):
+    from gendiff.gendiff import get_diff_dict
     sorted_keys = sorted(diff_dict)
     for key in sorted_keys:
 
@@ -27,7 +28,8 @@ def complete_diff_list(diff_dict, diff_list: list, depth_lvl=1):
                 diff_list.append(
                     f'{" " * (SPACES_PER_LVL * depth_lvl - LEFT_SHIFT)}- '
                     f'{key}: ' + '{')
-                complete_diff_list(old_value, diff_list, depth_lvl + 1)
+                complete_diff_list(get_diff_dict(old_value, old_value),
+                                   diff_list, depth_lvl + 1)
             else:
                 diff_list.append(
                     f'{" " * (SPACES_PER_LVL * depth_lvl - LEFT_SHIFT)}- '
@@ -36,7 +38,8 @@ def complete_diff_list(diff_dict, diff_list: list, depth_lvl=1):
                 diff_list.append(
                     f'{" " * (SPACES_PER_LVL * depth_lvl - LEFT_SHIFT)}+ '
                     f'{key}: ' + '{')
-                complete_diff_list(value, diff_list, depth_lvl + 1)
+                complete_diff_list(get_diff_dict(value, value), diff_list,
+                                   depth_lvl + 1)
             else:
                 diff_list.append(
                     f'{" " * (SPACES_PER_LVL * depth_lvl - LEFT_SHIFT)}+ '
@@ -50,7 +53,8 @@ def complete_diff_list(diff_dict, diff_list: list, depth_lvl=1):
                 diff_list.append(
                     f'{" " * (SPACES_PER_LVL * depth_lvl - LEFT_SHIFT)}- '
                     f'{key}: ' + '{')
-                complete_diff_list(value, diff_list, depth_lvl + 1)
+                complete_diff_list(get_diff_dict(value, value), diff_list,
+                                   depth_lvl + 1)
             else:
                 diff_list.append(
                     f'{" " * (SPACES_PER_LVL * depth_lvl - LEFT_SHIFT)}- '
@@ -60,7 +64,8 @@ def complete_diff_list(diff_dict, diff_list: list, depth_lvl=1):
                 diff_list.append(
                     f'{" " * (SPACES_PER_LVL * depth_lvl - LEFT_SHIFT)}+ '
                     f'{key}: ' + '{')
-                complete_diff_list(value, diff_list, depth_lvl + 1)
+                complete_diff_list(get_diff_dict(value, value), diff_list,
+                                   depth_lvl + 1)
             else:
                 diff_list.append(
                     f'{" " * (SPACES_PER_LVL * depth_lvl - LEFT_SHIFT)}+ '
