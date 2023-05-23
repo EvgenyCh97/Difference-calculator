@@ -21,7 +21,9 @@ def get_dict_from(file_path):
 
 def get_diff_dict(dict1, dict2):
     diff_dict = dict()
-    for key in dict1.keys():
+    shared_keys = set(dict1.keys()) | set(dict2.keys())
+    added_keys = set(dict2.keys()) - set(dict1.keys())
+    for key in shared_keys:
         if key in dict2.keys() and type(dict1.get(key)) == dict and type(
                 dict2.get(key)) == dict:
             diff_dict[key] = {'type': 'nested',
@@ -36,10 +38,8 @@ def get_diff_dict(dict1, dict2):
                                   'old_value': dict1.get(key)}
         else:
             diff_dict[key] = {'type': 'deleted', 'value': dict1.get(key)}
-    added_keys = set(dict2)
-    added_keys.difference_update(set(dict1))
-    for key in added_keys:
-        diff_dict[key] = {'type': 'added', 'value': dict2.get(key)}
+        if key in added_keys:
+            diff_dict[key] = {'type': 'added', 'value': dict2.get(key)}
     return diff_dict
 
 
