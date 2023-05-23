@@ -10,69 +10,42 @@ def get_stylish(diff_dict):
 
 
 def complete_diff_list(diff_dict, diff_list: list, depth_lvl=1):
-    from gendiff.gendiff import get_diff_dict
     sorted_keys = sorted(diff_dict)
     for key in sorted_keys:
-
         value = convert_to_json(diff_dict[key]['value'])
         key_type = diff_dict[key]['type']
-
         if key_type == 'nested':
-            diff_list.append(
-                f'{" " * (SPACES_PER_LVL * depth_lvl - LEFT_SHIFT)}  '
-                f'{key}: ' + '{')
-            complete_diff_list(value, diff_list, depth_lvl + 1)
+            form_string(diff_list, key, key_type, value, depth_lvl, '  ')
         if key_type == 'changed':
             old_value = convert_to_json(diff_dict[key]['old_value'])
-            if type(old_value) == dict:
-                diff_list.append(
-                    f'{" " * (SPACES_PER_LVL * depth_lvl - LEFT_SHIFT)}- '
-                    f'{key}: ' + '{')
-                complete_diff_list(get_diff_dict(old_value, old_value),
-                                   diff_list, depth_lvl + 1)
-            else:
-                diff_list.append(
-                    f'{" " * (SPACES_PER_LVL * depth_lvl - LEFT_SHIFT)}- '
-                    f'{key}: {old_value}')
-            if type(value) == dict:
-                diff_list.append(
-                    f'{" " * (SPACES_PER_LVL * depth_lvl - LEFT_SHIFT)}+ '
-                    f'{key}: ' + '{')
-                complete_diff_list(get_diff_dict(value, value), diff_list,
-                                   depth_lvl + 1)
-            else:
-                diff_list.append(
-                    f'{" " * (SPACES_PER_LVL * depth_lvl - LEFT_SHIFT)}+ '
-                    f'{key}: {value}')
+            form_string(diff_list, key, key_type, old_value, depth_lvl, '- ')
+            form_string(diff_list, key, key_type, value, depth_lvl, '+ ')
         if key_type == 'unchanged':
-            diff_list.append(
-                f'{" " * (SPACES_PER_LVL * depth_lvl - LEFT_SHIFT)}  '
-                f'{key}: {value}')
+            form_string(diff_list, key, key_type, value, depth_lvl, '  ')
         if key_type == 'deleted':
-            if type(value) == dict:
-                diff_list.append(
-                    f'{" " * (SPACES_PER_LVL * depth_lvl - LEFT_SHIFT)}- '
-                    f'{key}: ' + '{')
-                complete_diff_list(get_diff_dict(value, value), diff_list,
-                                   depth_lvl + 1)
-            else:
-                diff_list.append(
-                    f'{" " * (SPACES_PER_LVL * depth_lvl - LEFT_SHIFT)}- '
-                    f'{key}: {value}')
+            form_string(diff_list, key, key_type, value, depth_lvl, '- ')
         if key_type == 'added':
-            if type(value) == dict:
-                diff_list.append(
-                    f'{" " * (SPACES_PER_LVL * depth_lvl - LEFT_SHIFT)}+ '
-                    f'{key}: ' + '{')
-                complete_diff_list(get_diff_dict(value, value), diff_list,
-                                   depth_lvl + 1)
-            else:
-                diff_list.append(
-                    f'{" " * (SPACES_PER_LVL * depth_lvl - LEFT_SHIFT)}+ '
-                    f'{key}: {value}')
+            form_string(diff_list, key, key_type, value, depth_lvl, '+ ')
         if key == sorted_keys[-1]:
             diff_list.append(f'{" " * SPACES_PER_LVL * (depth_lvl - 1)}' + '}')
     return diff_list
+
+
+def form_string(diff_list, key, key_type, value, depth_lvl, spec_char):
+    from gendiff.gendiff import get_diff_dict
+    if type(value) == dict:
+        diff_list.append(
+            f'{" " * (SPACES_PER_LVL * depth_lvl - LEFT_SHIFT)}{spec_char}'
+            f'{key}: ' + '{')
+        if key_type == 'nested':
+            complete_diff_list(value, diff_list, depth_lvl + 1)
+        else:
+            complete_diff_list(get_diff_dict(value, value), diff_list,
+                               depth_lvl + 1)
+    else:
+        diff_list.append(
+            f'{" " * (SPACES_PER_LVL * depth_lvl - LEFT_SHIFT)}{spec_char}'
+            f'{key}: {value}')
 
 
 def convert_to_json(value):
