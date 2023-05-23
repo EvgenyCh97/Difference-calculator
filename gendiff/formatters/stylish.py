@@ -38,10 +38,10 @@ def form_string(diff_list, key, key_type, value, depth_lvl, spec_char):
             f'{" " * (SPACES_PER_LVL * depth_lvl - LEFT_SHIFT)}{spec_char}'
             f'{key}: ' + '{')
         if key_type == 'nested':
-            complete_diff_list(value, diff_list, depth_lvl + 1)
+            complete_stylish_list(value, diff_list, depth_lvl + 1)
         else:
-            complete_diff_list(get_diff_dict(value, value), diff_list,
-                               depth_lvl + 1)
+            complete_stylish_list(get_diff_dict(value, value), diff_list,
+                                  depth_lvl + 1)
     else:
         diff_list.append(
             f'{" " * (SPACES_PER_LVL * depth_lvl - LEFT_SHIFT)}{spec_char}'
