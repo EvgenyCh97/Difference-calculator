@@ -2,11 +2,11 @@ import json
 
 
 def get_plain(diff_dict):
-    diff_list = complete_diff_list(diff_dict, list())
+    diff_list = complete_plain_list(diff_dict, list())
     return '\n'.join(diff_list)
 
 
-def complete_diff_list(diff_dict, diff_list: list, path=[], depth_lvl=1):
+def complete_plain_list(diff_dict, diff_list: list, path=[], depth_lvl=1):
     sorted_keys = sorted(diff_dict)
     for key in sorted_keys:
 
