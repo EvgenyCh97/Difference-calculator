@@ -14,7 +14,7 @@ def complete_diff_list(diff_dict, diff_list: list, depth_lvl=1):
     sorted_keys = sorted(diff_dict)
     for key in sorted_keys:
 
-        value = converter(diff_dict[key]['value'])
+        value = convert_to_json(diff_dict[key]['value'])
         key_type = diff_dict[key]['type']
 
         if key_type == 'nested':
@@ -23,7 +23,7 @@ def complete_diff_list(diff_dict, diff_list: list, depth_lvl=1):
                 f'{key}: ' + '{')
             complete_diff_list(value, diff_list, depth_lvl + 1)
         if key_type == 'changed':
-            old_value = converter(diff_dict[key]['old_value'])
+            old_value = convert_to_json(diff_dict[key]['old_value'])
             if type(old_value) == dict:
                 diff_list.append(
                     f'{" " * (SPACES_PER_LVL * depth_lvl - LEFT_SHIFT)}- '
@@ -75,8 +75,8 @@ def complete_diff_list(diff_dict, diff_list: list, depth_lvl=1):
     return diff_list
 
 
-def converter(value):
+def convert_to_json(value):
     if type(value) not in [int, float, dict]:
-        return json.dumps(value).replace('"', '')
+        return json.dumps(value).replace('"', "")
     else:
         return value
