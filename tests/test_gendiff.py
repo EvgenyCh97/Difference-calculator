@@ -8,17 +8,10 @@ YAML2 = 'tests/fixtures/file2.yml'
 
 
 @pytest.mark.parametrize(
-    "filepath1, filepath2, expected",
-    [(JSON1, JSON2, 'tests/fixtures/diff'),
-     (YAML1, YAML2, 'tests/fixtures/yaml_diff')])
-def test_generate_diff_stylish(filepath1, filepath2, expected):
-    with open(expected, 'r') as diff:
-        assert gendiff.generate_diff(filepath1, filepath2) == diff.read()
-
-
-@pytest.mark.parametrize(
     "filepath1, filepath2, format, expected",
-    [(JSON1, JSON2, 'plain', 'tests/fixtures/plain_diff'),
+    [(JSON1, JSON2, 'stylish', 'tests/fixtures/diff'),
+     (YAML1, YAML2, 'stylish', 'tests/fixtures/yaml_diff'),
+     (JSON1, JSON2, 'plain', 'tests/fixtures/plain_diff'),
      (JSON1, JSON2, 'json', 'tests/fixtures/json_diff')])
 def test_generate_diff(filepath1, filepath2, format, expected):
     with open(expected, 'r') as diff:
