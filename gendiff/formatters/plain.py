@@ -21,16 +21,8 @@ def complete_diff_list(diff_dict, diff_list: list, path=[], depth_lvl=1):
             complete_diff_list(children, diff_list, path, depth_lvl + 1)
         if key_type == 'changed':
             old_value = converter(diff_dict[key]['old_value'])
-            if type(old_value) == dict:
-                diff_list.append(f'Property \'{"".join(path)}{key}\' was '
-                                 f'updated. From [complex value] to {value}')
-            elif type(value) == dict:
-                diff_list.append(f'Property \'{"".join(path)}{key}\' '
-                                 f'was updated. From {old_value} to '
-                                 f'[complex value]')
-            else:
-                diff_list.append(f'Property \'{"".join(path)}{key}\' '
-                                 f'was updated. From {old_value} to {value}')
+            diff_list.append(f'Property \'{"".join(path)}{key}\' '
+                             f'was updated. From {old_value} to {value}')
         if key_type == 'deleted':
             diff_list.append(f'Property \'{"".join(path)}{key}\' was removed')
         if key_type == 'added':
