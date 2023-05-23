@@ -5,6 +5,14 @@ description = "Difference calculator"
 authors = ["Evgenij Chajka <chay67ka26@gmail.com>"]
 readme = "README.md"
 packages = [{include = "gendiff"}]
+classifiers = [
+    "Programming Language :: Python",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3.8"
+]
+repository = "https://github.com/EvgenyCh97/Difference-calculator"
 
 [tool.poetry.dependencies]
 python = ">=3.8.1,<4.0"
