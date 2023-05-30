@@ -1,5 +1,6 @@
 import json
 import yaml
+import os
 from gendiff.formatters import stylish, plain
 from gendiff.formatters.json import get_json
 from yaml import CLoader as Loader
@@ -13,9 +14,10 @@ def read_file(file_path):
 def get_data(file_path):
     lines = read_file(file_path)
     result = ''.join(lines)
-    if file_path.endswith('.yml') or file_path.endswith('.yaml'):
+    file_format = os.path.splitext(file_path)[-1]
+    if file_format in ['.yaml', '.yml']:
         return yaml.load(result, Loader=Loader)
-    if file_path.endswith('.json'):
+    if file_format == '.json':
         return json.loads(result)
 
 
