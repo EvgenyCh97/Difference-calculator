@@ -32,7 +32,7 @@ def complete_stylish_list(diff_dict, diff_list: list, depth_lvl=1):
 
 
 def form_string(diff_list, key, key_type, value, depth_lvl, spec_char):
-    from gendiff.gendiff import get_diff_dict
+    from gendiff.gendiff import get_diff
     if type(value) == dict:
         diff_list.append(
             f'{" " * (SPACES_PER_LVL * depth_lvl - LEFT_SHIFT)}{spec_char}'
@@ -40,8 +40,7 @@ def form_string(diff_list, key, key_type, value, depth_lvl, spec_char):
         if key_type == 'nested':
             complete_stylish_list(value, diff_list, depth_lvl + 1)
         else:
-            complete_stylish_list(get_diff_dict(value, value), diff_list,
-                                  depth_lvl + 1)
+            complete_stylish_list(get_diff(value, value), depth_lvl + 1)
     else:
         diff_list.append(
             f'{" " * (SPACES_PER_LVL * depth_lvl - LEFT_SHIFT)}{spec_char}'

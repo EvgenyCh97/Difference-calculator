@@ -10,7 +10,7 @@ def read_file(file_path):
         return file.readlines()
 
 
-def get_dict_from(file_path):
+def get_data(file_path):
     lines = read_file(file_path)
     result = ''.join(lines)
     if file_path.endswith('.yml') or file_path.endswith('.yaml'):
@@ -19,34 +19,33 @@ def get_dict_from(file_path):
         return json.loads(result)
 
 
-def get_diff_dict(dict1, dict2):
-    diff_dict = dict()
-    shared_keys = set(dict1.keys()) | set(dict2.keys())
-    added_keys = set(dict2.keys()) - set(dict1.keys())
-    for key in shared_keys:
-        if key in dict2.keys() and type(dict1.get(key)) == dict and type(
-                dict2.get(key)) == dict:
-            diff_dict[key] = {'type': 'nested',
-                              'value': get_diff_dict(dict1.get(key),
-                                                     dict2.get(key))}
+def get_diff(dict1, dict2):
+    diff = dict()
+    keys_set1, keys_set2 = set(dict1.keys()), set(dict2.keys())
+    keys_concatenation = keys_set1.union(keys_set2)
+    added_keys = keys_set2.difference(keys_set1)
+    for key in keys_concatenation:
+        value1 = dict1.get(key)
+        value2 = dict2.get(key)
+        if type(value1) == dict and type(value2) == dict:
+            diff[key] = {'type': 'nested', 'value': get_diff(value1, value2)}
         elif key in dict2.keys():
-            if dict1.get(key) == dict2.get(key):
-                diff_dict[key] = {'type': 'unchanged', 'value': dict1.get(key)}
+            if value1 == value2:
+                diff[key] = {'type': 'unchanged', 'value': value1}
             else:
-                diff_dict[key] = {'type': 'changed',
-                                  'value': dict2.get(key),
-                                  'old_value': dict1.get(key)}
+                diff[key] = {'type': 'changed', 'new_value': value2,
+                             'old_value': value1}
         else:
-            diff_dict[key] = {'type': 'deleted', 'value': dict1.get(key)}
+            diff[key] = {'type': 'deleted', 'value': value1}
         if key in added_keys:
-            diff_dict[key] = {'type': 'added', 'value': dict2.get(key)}
-    return diff_dict
+            diff[key] = {'type': 'added', 'value': value2}
+    return diff
 
 
 def generate_diff(file_path1, file_path2, format_name='stylish'):
-    dict1 = get_dict_from(file_path1)
-    dict2 = get_dict_from(file_path2)
-    diff = get_diff_dict(dict1, dict2)
+    dict1 = get_data(file_path1)
+    dict2 = get_data(file_path2)
+    diff = get_diff(dict1, dict2)
     if format_name == 'stylish':
         return stylish.get_stylish(diff)
     if format_name == 'plain':
