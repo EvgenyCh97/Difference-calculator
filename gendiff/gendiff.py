@@ -33,15 +33,23 @@ def get_diff(dict1, dict2):
             diff[key] = {'type': 'nested', 'value': get_diff(value1, value2)}
         elif key in dict2.keys():
             if value1 == value2:
-                diff[key] = {'type': 'unchanged', 'value': value1}
+                diff[key] = {'type': 'unchanged',
+                             'value': apply_get_diff_to_dict(value1)}
             else:
-                diff[key] = {'type': 'changed', 'new_value': value2,
-                             'old_value': value1}
+                diff[key] = {'type': 'changed',
+                             'new_value': apply_get_diff_to_dict(value2),
+                             'old_value': apply_get_diff_to_dict(value1)}
         else:
-            diff[key] = {'type': 'deleted', 'value': value1}
+            diff[key] = {'type': 'deleted',
+                         'value': apply_get_diff_to_dict(value1)}
         if key in added_keys:
-            diff[key] = {'type': 'added', 'value': value2}
+            diff[key] = {'type': 'added',
+                         'value': apply_get_diff_to_dict(value2)}
     return diff
+
+
+def apply_get_diff_to_dict(value):
+    return get_diff(value, value) if type(value) == dict else value
 
 
 def generate_diff(file_path1, file_path2, format_name='stylish'):
