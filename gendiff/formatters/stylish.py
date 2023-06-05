@@ -19,22 +19,22 @@ def complete_stylish_list(diff_dict):
             if key_type == 'changed':
                 old_value = convert_to_json(node[key]['old_value'])
                 new_value = convert_to_json(node[key]['new_value'])
-                form_string(diff_list, key, old_value, depth_lvl, '- ')
+                diff_list.append(form_string(key, old_value, depth_lvl, '- '))
                 if type(old_value) == dict:
                     inner(old_value, depth_lvl + 1)
-                form_string(diff_list, key, new_value, depth_lvl, '+ ')
+                diff_list.append(form_string(key, new_value, depth_lvl, '+ '))
                 if type(new_value) == dict:
                     inner(new_value, depth_lvl + 1)
             else:
                 value = convert_to_json(node[key]['value'])
                 if key_type == 'nested':
-                    form_string(diff_list, key, value, depth_lvl, '  ')
+                    diff_list.append(form_string(key, value, depth_lvl, '  '))
                 if key_type == 'unchanged':
-                    form_string(diff_list, key, value, depth_lvl, '  ')
+                    diff_list.append(form_string(key, value, depth_lvl, '  '))
                 if key_type == 'deleted':
-                    form_string(diff_list, key, value, depth_lvl, '- ')
+                    diff_list.append(form_string(key, value, depth_lvl, '- '))
                 if key_type == 'added':
-                    form_string(diff_list, key, value, depth_lvl, '+ ')
+                    diff_list.append(form_string(key, value, depth_lvl, '+ '))
                 if type(value) == dict:
                     inner(value, depth_lvl + 1)
             if key == sorted_keys[-1]:
@@ -45,15 +45,13 @@ def complete_stylish_list(diff_dict):
     return diff_list
 
 
-def form_string(diff_list, key, value, depth_lvl, spec_char):
+def form_string(key, value, depth_lvl, spec_char):
     if type(value) == dict:
-        diff_list.append(
-            f'{" " * (SPACES_PER_LVL * depth_lvl - LEFT_SHIFT)}{spec_char}'
-            f'{key}: ' + '{')
+        return f'{" " * (SPACES_PER_LVL * depth_lvl - LEFT_SHIFT)}{spec_char}' \
+               f'{key}: ' + '{'
     else:
-        diff_list.append(
-            f'{" " * (SPACES_PER_LVL * depth_lvl - LEFT_SHIFT)}{spec_char}'
-            f'{key}: {value}')
+        return f'{" " * (SPACES_PER_LVL * depth_lvl - LEFT_SHIFT)}{spec_char}' \
+               f'{key}: {value}'
 
 
 def convert_to_json(value):

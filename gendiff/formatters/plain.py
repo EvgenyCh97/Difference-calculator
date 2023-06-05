@@ -1,6 +1,3 @@
-import json
-
-
 def get_plain(diff_dict):
     diff_list = complete_plain_list(diff_dict)
     return '\n'.join(diff_list)
@@ -45,6 +42,8 @@ def convert_to_plain(value):
     if type(value) == dict:
         return '[complex value]'
     elif type(value) not in [int, float]:
-        return json.dumps(value).replace('"', "'")
+        return f"'{value}'".replace(
+            "'True'", "true").replace(
+            "'False'", "false").replace("'None'", "null")
     else:
         return value
