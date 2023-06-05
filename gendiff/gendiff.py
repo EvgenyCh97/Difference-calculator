@@ -11,13 +11,15 @@ def read_file(file_path):
         return file.read()
 
 
-def get_data(file_path):
-    lines = read_file(file_path)
-    file_format = os.path.splitext(file_path)[-1]
-    if file_format in ['.yaml', '.yml']:
-        return yaml.load(lines, Loader=Loader)
-    if file_format == '.json':
-        return json.loads(lines)
+def get_file_extension(file_path):
+    return os.path.splitext(file_path)[-1]
+
+
+def parse(content, extension):
+    if extension in ['.yaml', '.yml']:
+        return yaml.load(content, Loader=Loader)
+    if extension == '.json':
+        return json.loads(content)
 
 
 def get_diff(dict1, dict2):
@@ -52,8 +54,10 @@ def apply_get_diff_to_dict(value):
 
 
 def generate_diff(file_path1, file_path2, format_name='stylish'):
-    dict1 = get_data(file_path1)
-    dict2 = get_data(file_path2)
+    content1, ext1 = read_file(file_path1), get_file_extension(file_path1)
+    content2, ext2 = read_file(file_path2), get_file_extension(file_path2)
+    dict1 = parse(content1, ext1)
+    dict2 = parse(content2, ext2)
     diff = get_diff(dict1, dict2)
     if format_name == 'stylish':
         return stylish.get_stylish(diff)
