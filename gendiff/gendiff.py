@@ -26,13 +26,12 @@ def get_diff(dict1, dict2):
     diff = dict()
     keys_set1, keys_set2 = set(dict1.keys()), set(dict2.keys())
     all_keys = keys_set1.union(keys_set2)
-    added_keys = keys_set2.difference(keys_set1)
     for key in all_keys:
         value1 = dict1.get(key)
         value2 = dict2.get(key)
         if type(value1) == dict and type(value2) == dict:
             diff[key] = {'type': 'nested', 'value': get_diff(value1, value2)}
-        elif key in dict2.keys():
+        elif key in dict1.keys() and key in dict2.keys():
             if value1 == value2:
                 diff[key] = {'type': 'unchanged',
                              'value': apply_get_diff_to_dict(value1)}
@@ -40,10 +39,10 @@ def get_diff(dict1, dict2):
                 diff[key] = {'type': 'changed',
                              'new_value': apply_get_diff_to_dict(value2),
                              'old_value': apply_get_diff_to_dict(value1)}
-        else:
+        elif key in dict1.keys():
             diff[key] = {'type': 'deleted',
                          'value': apply_get_diff_to_dict(value1)}
-        if key in added_keys:
+        elif key in dict2.keys():
             diff[key] = {'type': 'added',
                          'value': apply_get_diff_to_dict(value2)}
     return diff
