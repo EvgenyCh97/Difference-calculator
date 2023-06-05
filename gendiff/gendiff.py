@@ -8,17 +8,16 @@ from yaml import CLoader as Loader
 
 def read_file(file_path):
     with open(file_path, 'r') as file:
-        return file.readlines()
+        return file.read()
 
 
 def get_data(file_path):
     lines = read_file(file_path)
-    result = ''.join(lines)
     file_format = os.path.splitext(file_path)[-1]
     if file_format in ['.yaml', '.yml']:
-        return yaml.load(result, Loader=Loader)
+        return yaml.load(lines, Loader=Loader)
     if file_format == '.json':
-        return json.loads(result)
+        return json.loads(lines)
 
 
 def get_diff(dict1, dict2):
