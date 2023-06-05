@@ -34,17 +34,17 @@ def get_diff(dict1, dict2):
         elif key in dict1.keys() and key in dict2.keys():
             if value1 == value2:
                 diff[key] = {'type': 'unchanged',
-                             'value': apply_get_diff_to_dict(value1)}
+                             'value': value1}
             else:
                 diff[key] = {'type': 'changed',
-                             'new_value': apply_get_diff_to_dict(value2),
-                             'old_value': apply_get_diff_to_dict(value1)}
+                             'new_value': value2,
+                             'old_value': value1}
         elif key in dict1.keys():
             diff[key] = {'type': 'deleted',
-                         'value': apply_get_diff_to_dict(value1)}
+                         'value': value1}
         elif key in dict2.keys():
             diff[key] = {'type': 'added',
-                         'value': apply_get_diff_to_dict(value2)}
+                         'value': value2}
     return diff
 
 
