@@ -1,5 +1,3 @@
-import json
-
 SPACES_PER_LVL = 4
 LEFT_SHIFT = 2
 
@@ -56,6 +54,8 @@ def form_string(key, value, depth_lvl, spec_char):
 
 def convert_to_json(value):
     if type(value) not in [int, float, dict]:
-        return json.dumps(value).replace('"', "")
+        return str(value).replace(
+            "True", "true").replace(
+            "False", "false").replace("None", "null")
     else:
         return value
