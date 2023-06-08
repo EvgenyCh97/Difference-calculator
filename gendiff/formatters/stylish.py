@@ -17,16 +17,21 @@ def get_stylish(diff_dict):
             if key_type == 'changed':
                 old_value = node[key]['old_value']
                 new_value = node[key]['new_value']
-                lines.append(f'{deep_indent}- {key}: {form_string(old_value, depth_lvl + 1)}')
-                lines.append(f'{deep_indent}+ {key}: {form_string(new_value, depth_lvl + 1)}')
+                lines.append(f'{deep_indent}- {key}: '
+                             f'{form_string(old_value, depth_lvl + 1)}')
+                lines.append(f'{deep_indent}+ {key}: '
+                             f'{form_string(new_value, depth_lvl + 1)}')
             if key_type == 'nested':
-                lines.append(f'{deep_indent}  {key}: {inner(value, depth_lvl + 1)}')
+                lines.append(f'{deep_indent}  {key}: '
+                             f'{inner(value, depth_lvl + 1)}')
+
+            value = f'{form_string(value, depth_lvl + 1)}'
             if key_type == 'unchanged':
-                lines.append(f'{deep_indent}  {key}: {form_string(value, depth_lvl + 1)}')
+                lines.append(f'{deep_indent}  {key}: {value}')
             if key_type == 'deleted':
-                lines.append(f'{deep_indent}- {key}: {form_string(value, depth_lvl + 1)}')
+                lines.append(f'{deep_indent}- {key}: {value}')
             if key_type == 'added':
-                lines.append(f'{deep_indent}+ {key}: {form_string(value, depth_lvl + 1)}')
+                lines.append(f'{deep_indent}+ {key}: {value}')
 
         result = itertools.chain('{', lines, [current_indent + "}"])
         return '\n'.join(result)
@@ -34,21 +39,21 @@ def get_stylish(diff_dict):
     return inner(diff_dict)
 
 
-def form_string(value, depth_lvl):
+def form_string(tree, depth_lvl):
 
-    def inner(current_value, depth):
-        if type(current_value) != dict:
-            if current_value in [True, False, None]:
-                return str(current_value).lower().replace('none', 'null')
+    def inner(node, depth):
+        if type(node) != dict:
+            if node in [True, False, None]:
+                return str(node).lower().replace('none', 'null')
             else:
-                return str(current_value)
+                return str(node)
 
         deep_indent = ' ' * SPACES_PER_LVL * depth
         current_indent = ' ' * SPACES_PER_LVL * (depth - 1)
         lines = []
-        for key, val in current_value.items():
-            lines.append(f'{deep_indent}{key}: {inner(val, depth + 1)}')
+        for key, value in node.items():
+            lines.append(f'{deep_indent}{key}: {inner(value, depth + 1)}')
         result = itertools.chain("{", lines, [current_indent + "}"])
         return '\n'.join(result)
 
-    return inner(value, depth_lvl)
+    return inner(tree, depth_lvl)
