@@ -1,77 +1,54 @@
+import itertools
+
 SPACES_PER_LVL = 4
 LEFT_SHIFT = 2
 
 
 def get_stylish(diff_dict):
-    diff_list = complete_stylish_list(diff_dict)
-    return '{\n' + '\n'.join(diff_list)
-
-
-def complete_stylish_list(diff_dict):
-    diff_list = list()
 
     def inner(node, depth_lvl=1):
+        deep_indent = ' ' * (SPACES_PER_LVL * depth_lvl - LEFT_SHIFT)
+        current_indent = ' ' * SPACES_PER_LVL * (depth_lvl - 1)
+        lines = []
         sorted_keys = sorted(node)
         for key in sorted_keys:
             key_type = node[key].get('type')
-            value = convert_to_json(node.get(key).get('value'))
+            value = node.get(key).get('value')
             if key_type == 'changed':
-                old_value = convert_to_json(node[key]['old_value'])
-                new_value = convert_to_json(node[key]['new_value'])
-                diff_list.append(form_string(key, old_value, depth_lvl, '- '))
-                diff_list.append(form_string(key, new_value, depth_lvl, '+ '))
+                old_value = node[key]['old_value']
+                new_value = node[key]['new_value']
+                lines.append(f'{deep_indent}- {key}: {form_string(old_value, depth_lvl + 1)}')
+                lines.append(f'{deep_indent}+ {key}: {form_string(new_value, depth_lvl + 1)}')
             if key_type == 'nested':
-                diff_list.append(
-                    f'{" " * (SPACES_PER_LVL * depth_lvl - LEFT_SHIFT)}  '
-                    f'{key}: ' + '{')
-                inner(value, depth_lvl + 1)
+                lines.append(f'{deep_indent}  {key}: {inner(value, depth_lvl + 1)}')
             if key_type == 'unchanged':
-                diff_list.append(form_string(key, value, depth_lvl, '  '))
+                lines.append(f'{deep_indent}  {key}: {form_string(value, depth_lvl + 1)}')
             if key_type == 'deleted':
-                diff_list.append(form_string(key, value, depth_lvl, '- '))
+                lines.append(f'{deep_indent}- {key}: {form_string(value, depth_lvl + 1)}')
             if key_type == 'added':
-                diff_list.append(form_string(key, value, depth_lvl, '+ '))
-            if key == sorted_keys[-1]:
-                diff_list.append(
-                    f'{" " * SPACES_PER_LVL * (depth_lvl - 1)}' + '}')
+                lines.append(f'{deep_indent}+ {key}: {form_string(value, depth_lvl + 1)}')
 
-    inner(diff_dict)
-    return diff_list
+        result = itertools.chain('{', lines, [current_indent + "}"])
+        return '\n'.join(result)
 
-
-def form_string(key, value, depth_lvl, spec_char):
-    indent = SPACES_PER_LVL * depth_lvl - LEFT_SHIFT
-    if type(value) == dict:
-        return f'{" " * indent}{spec_char}{key}: ' + '{\n' + \
-               form_str_for_dict(value, depth_lvl + 1)
-    else:
-        return f'{" " * indent}{spec_char}{key}: {value}'
+    return inner(diff_dict)
 
 
-def form_str_for_dict(tree, depth_lvl):
-    result = list()
+def form_string(value, depth_lvl):
 
-    def inner(node, depth_lvl):
-        indent = SPACES_PER_LVL * depth_lvl
-        sorted_keys = sorted(node.keys())
-        for key in sorted_keys:
-            if type(node[key]) == dict:
-                result.append((' ' * indent) + f'{key}: ' + '{')
-                inner(node[key], depth_lvl + 1)
+    def inner(current_value, depth):
+        if type(current_value) != dict:
+            if current_value in [True, False, None]:
+                return str(current_value).lower().replace('none', 'null')
             else:
-                result.append((' ' * indent) + f'{key}: {node[key]}')
-            if key == sorted_keys[-1]:
-                result.append(
-                    f'{" " * SPACES_PER_LVL * (depth_lvl - 1)}' + '}')
+                return str(current_value)
 
-    inner(tree, depth_lvl)
-    return '\n'.join(result)
+        deep_indent = ' ' * SPACES_PER_LVL * depth
+        current_indent = ' ' * SPACES_PER_LVL * (depth - 1)
+        lines = []
+        for key, val in current_value.items():
+            lines.append(f'{deep_indent}{key}: {inner(val, depth + 1)}')
+        result = itertools.chain("{", lines, [current_indent + "}"])
+        return '\n'.join(result)
 
-
-def convert_to_json(value):
-    if type(value) not in [int, float, dict]:
-        return str(value).replace(
-            "True", "true").replace(
-            "False", "false").replace("None", "null")
-    else:
-        return value
+    return inner(value, depth_lvl)
