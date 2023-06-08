@@ -41,9 +41,7 @@ def complete_plain_list(diff_dict):
 def convert_to_plain(value):
     if type(value) == dict:
         return '[complex value]'
-    elif type(value) not in [int, float]:
-        return f"'{value}'".replace(
-            "'True'", "true").replace(
-            "'False'", "false").replace("'None'", "null")
+    elif value in [True, False, None]:
+        return str(value).lower().replace('none', 'null')
     else:
-        return value
+        return f"'{value}'"
