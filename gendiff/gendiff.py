@@ -48,10 +48,6 @@ def get_diff(dict1, dict2):
     return diff
 
 
-def apply_get_diff_to_dict(value):
-    return get_diff(value, value) if type(value) == dict else value
-
-
 def generate_diff(file_path1, file_path2, format_name='stylish'):
     content1, ext1 = read_file(file_path1), get_file_extension(file_path1)
     content2, ext2 = read_file(file_path2), get_file_extension(file_path2)
